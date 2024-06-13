@@ -29,8 +29,7 @@ class ClientController extends Controller
             'address' => 'nullable|string|max:255',
         ]);
 
-        $client = new Client($validated);
-        $client->save();
+        Client::create($validated);
 
         return redirect()->route('clients.index')->with('success', 'Client created successfully.');
     }

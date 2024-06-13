@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('themes.default.layouts.layout')
 
 @section('content')
     <h1>Assets</h1>
@@ -11,6 +11,7 @@
                 <th>Description</th>
                 <th>Status</th>
                 <th>Location</th>
+                <th>Image</th> <!-- Add a new column for Image -->
                 <th>Actions</th>
             </tr>
         </thead>
@@ -22,6 +23,13 @@
                     <td>{{ $asset->description }}</td>
                     <td>{{ $asset->status }}</td>
                     <td>{{ $asset->location }}</td>
+                    <td>
+                        @if ($asset->image_path)
+                            <img src="{{ asset('storage/' . $asset->image_path) }}" alt="{{ $asset->description }}" style="width: 100px; height: auto;">
+                        @else
+                            No image
+                        @endif
+                    </td> <!-- Add the image preview here -->
                     <td>
                         <a href="{{ route('assets.edit', $asset->id) }}" class="btn btn-warning">Edit</a>
                         <form action="{{ route('assets.destroy', $asset->id) }}" method="POST" style="display:inline;">
