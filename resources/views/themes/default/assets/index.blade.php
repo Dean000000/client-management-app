@@ -2,7 +2,7 @@
 
 @section('content')
     <h1>Assets</h1>
-    <a href="{{ route('assets.create') }}" class="btn btn-primary">Add Asset</a>
+    <a href="{{ route('assets.create.step1') }}" class="btn btn-primary">Add Asset</a> <!-- Update this link -->
     <table class="table mt-4">
         <thead>
             <tr>

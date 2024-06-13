@@ -22,12 +22,19 @@
         </div>
         <div class="form-group">
             <label for="status">Status</label>
-            <input type="text" name="status" id="status" class="form-control" value="{{ $asset->status }}" required>
+            <select name="status" id="status" class="form-control">
+                @foreach($statuses as $status)
+                    <option value="{{ $status->id }}" {{ $asset->status == $status->id ? 'selected' : '' }}>
+                        {{ $status->name }}
+                    </option>
+                @endforeach
+            </select>
         </div>
         <div class="form-group">
             <label for="location">Location</label>
             <input type="text" name="location" id="location" class="form-control" value="{{ $asset->location }}">
         </div>
+		   <button type="button" class="btn btn-secondary" id="get-location">Get Current Location</button>
         <div class="form-group">
             <label for="latitude">Latitude</label>
             <input type="text" name="latitude" id="latitude" class="form-control" value="{{ $asset->latitude }}" readonly>
@@ -45,9 +52,9 @@
                 No image
             @endif
         </div>
-        <button type="button" class="btn btn-secondary" id="get-location">Get Current Location</button>
         <button type="submit" class="btn btn-primary">Update Asset</button>
     </form>
+
 
     <script>
         document.getElementById('get-location').addEventListener('click', function() {

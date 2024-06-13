@@ -10,6 +10,44 @@ use Illuminate\Support\Facades\Storage;
 
 class AssetController extends Controller
 {
+    public function index()
+    {
+        $assets = Asset::with('client')->get();
+        $theme = config('themes.active');
+        return view("themes.$theme.assets.index", compact('assets'));
+    }
+public function edit(Asset $asset)
+    {
+        $clients = Client::all();
+        $statuses = Status::all();
+        $theme = config('themes.active');
+        return view("themes.$theme.assets.edit", compact('asset', 'clients', 'statuses'));
+    }
+
+    public function update(Request $request, Asset $asset)
+    {
+        $validated = $request->validate([
+            'client_id' => 'required|exists:clients,id',
+            'description' => 'required|string|max:255',
+            'status' => 'required|exists:statuses,id',
+            'location' => 'nullable|string|max:255',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
+            'image' => 'nullable|image|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            if ($asset->image_path) {
+                Storage::disk('public')->delete($asset->image_path);
+            }
+            $validated['image_path'] = $request->file('image')->store('assets', 'public');
+        }
+
+        $asset->update($validated);
+
+        return redirect()->route('assets.index')->with('success', 'Asset updated successfully.');
+    }
+
     public function createStep1()
     {
         $recentClients = Client::orderBy('updated_at', 'desc')->take(10)->get();
@@ -99,10 +137,10 @@ class AssetController extends Controller
         return redirect()->route('assets.index')->with('success', 'Asset created successfully.');
     }
 
-    public function searchClients(Request $request)
-    {
-        $query = $request->get('query', '');
-        $clients = Client::where('alias', 'LIKE', "%{$query}%")->get();
-        return response()->json($clients);
-    }
+public function searchClients(Request $request)
+{
+    $query = $request->get('query', '');
+    $clients = Client::where('alias', 'LIKE', "%{$query}%")->get();
+    return response()->json($clients);
+}
 }
