@@ -2,6 +2,7 @@
 
 @section('content')
     <h1>Edit Asset</h1>
+	<button type="button" class="btn btn-secondary" id="get-location">Get Current Location</button>
     <form action="{{ route('assets.update', $asset->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
@@ -43,3 +44,15 @@
         <button type="submit" class="btn btn-primary">Update Asset</button>
     </form>
 @endsection
+<script>
+    document.getElementById('get-location').addEventListener('click', function() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                document.getElementById('latitude').value = position.coords.latitude;
+                document.getElementById('longitude').value = position.coords.longitude;
+            });
+        } else {
+            alert('Geolocation is not supported by this browser.');
+        }
+    });
+</script>
