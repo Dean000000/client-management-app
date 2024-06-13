@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('clients', ClientController::class);
+
 Route::prefix('assets')->group(function () {
     Route::get('create/step1', [AssetController::class, 'createStep1'])->name('assets.create.step1');
     Route::post('create/step1', [AssetController::class, 'postCreateStep1'])->name('assets.create.step1.post');
@@ -45,13 +46,8 @@ Route::prefix('assets')->group(function () {
 
     Route::get('create/step6', [AssetController::class, 'createStep6'])->name('assets.create.step6');
     Route::post('create/step6', [AssetController::class, 'postCreateStep6'])->name('assets.create.step6.post');
-    
-    Route::get('/', [AssetController::class, 'index'])->name('assets.index');
-    Route::get('/create', [AssetController::class, 'create'])->name('assets.create');
-    Route::post('/', [AssetController::class, 'store'])->name('assets.store');
-    Route::get('/{asset}/edit', [AssetController::class, 'edit'])->name('assets.edit');
-    Route::put('/{asset}', [AssetController::class, 'update'])->name('assets.update');
-    Route::delete('/{asset}', [AssetController::class, 'destroy'])->name('assets.destroy');
 });
+
+Route::resource('assets', AssetController::class);
 
 require __DIR__.'/auth.php';
