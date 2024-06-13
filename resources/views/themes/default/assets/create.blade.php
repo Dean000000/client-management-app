@@ -1,54 +1,56 @@
-@extends('layout')
+@extends('themes.default.layouts.layout')
 
 @section('content')
     <h1>Add Asset</h1>
-	<button type="button" class="btn btn-secondary" id="get-location">Get Current Location</button>
+
     <form action="{{ route('assets.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
             <label for="client_id">Client</label>
-            <select class="form-control" id="client_id" name="client_id" required>
-                @foreach ($clients as $client)
+            <select name="client_id" id="client_id" class="form-control">
+                @foreach($clients as $client)
                     <option value="{{ $client->id }}">{{ $client->alias }}</option>
                 @endforeach
             </select>
         </div>
         <div class="form-group">
             <label for="description">Description</label>
-            <input type="text" class="form-control" id="description" name="description" required>
+            <input type="text" name="description" id="description" class="form-control" required>
         </div>
         <div class="form-group">
             <label for="status">Status</label>
-            <input type="text" class="form-control" id="status" name="status" required>
+            <input type="text" name="status" id="status" class="form-control" required>
         </div>
         <div class="form-group">
             <label for="location">Location</label>
-            <input type="text" class="form-control" id="location" name="location">
+            <input type="text" name="location" id="location" class="form-control">
         </div>
         <div class="form-group">
             <label for="latitude">Latitude</label>
-            <input type="text" class="form-control" id="latitude" name="latitude">
+            <input type="text" name="latitude" id="latitude" class="form-control" readonly>
         </div>
         <div class="form-group">
             <label for="longitude">Longitude</label>
-            <input type="text" class="form-control" id="longitude" name="longitude">
+            <input type="text" name="longitude" id="longitude" class="form-control" readonly>
         </div>
         <div class="form-group">
             <label for="image">Image</label>
-            <input type="file" class="form-control" id="image" name="image">
+            <input type="file" name="image" id="image" class="form-control">
         </div>
+        <button type="button" class="btn btn-secondary" id="get-location">Get Current Location</button>
         <button type="submit" class="btn btn-primary">Add Asset</button>
     </form>
+
+    <script>
+        document.getElementById('get-location').addEventListener('click', function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    document.getElementById('latitude').value = position.coords.latitude;
+                    document.getElementById('longitude').value = position.coords.longitude;
+                });
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        });
+    </script>
 @endsection
-<script>
-    document.getElementById('get-location').addEventListener('click', function() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                document.getElementById('latitude').value = position.coords.latitude;
-                document.getElementById('longitude').value = position.coords.longitude;
-            });
-        } else {
-            alert('Geolocation is not supported by this browser.');
-        }
-    });
-</script>

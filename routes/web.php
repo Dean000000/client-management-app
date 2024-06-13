@@ -27,6 +27,31 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('clients', ClientController::class);
-Route::resource('assets', AssetController::class);
+Route::prefix('assets')->group(function () {
+    Route::get('create/step1', [AssetController::class, 'createStep1'])->name('assets.create.step1');
+    Route::post('create/step1', [AssetController::class, 'postCreateStep1'])->name('assets.create.step1.post');
+
+    Route::get('create/step2', [AssetController::class, 'createStep2'])->name('assets.create.step2');
+    Route::post('create/step2', [AssetController::class, 'postCreateStep2'])->name('assets.create.step2.post');
+
+    Route::get('create/step3', [AssetController::class, 'createStep3'])->name('assets.create.step3');
+    Route::post('create/step3', [AssetController::class, 'postCreateStep3'])->name('assets.create.step3.post');
+
+    Route::get('create/step4', [AssetController::class, 'createStep4'])->name('assets.create.step4');
+    Route::post('create/step4', [AssetController::class, 'postCreateStep4'])->name('assets.create.step4.post');
+
+    Route::get('create/step5', [AssetController::class, 'createStep5'])->name('assets.create.step5');
+    Route::post('create/step5', [AssetController::class, 'postCreateStep5'])->name('assets.create.step5.post');
+
+    Route::get('create/step6', [AssetController::class, 'createStep6'])->name('assets.create.step6');
+    Route::post('create/step6', [AssetController::class, 'postCreateStep6'])->name('assets.create.step6.post');
+    
+    Route::get('/', [AssetController::class, 'index'])->name('assets.index');
+    Route::get('/create', [AssetController::class, 'create'])->name('assets.create');
+    Route::post('/', [AssetController::class, 'store'])->name('assets.store');
+    Route::get('/{asset}/edit', [AssetController::class, 'edit'])->name('assets.edit');
+    Route::put('/{asset}', [AssetController::class, 'update'])->name('assets.update');
+    Route::delete('/{asset}', [AssetController::class, 'destroy'])->name('assets.destroy');
+});
 
 require __DIR__.'/auth.php';

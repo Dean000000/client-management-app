@@ -4,34 +4,80 @@ namespace App\Http\Controllers;
 
 use App\Models\Asset;
 use App\Models\Client;
+use App\Models\Status;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class AssetController extends Controller
 {
-    public function index()
+    public function createStep1()
     {
-        $assets = Asset::with('client')->get();
-        $theme = config('themes.active');
-        return view("themes.$theme.assets.index", compact('assets'));
+        $recentClients = Client::orderBy('updated_at', 'desc')->take(10)->get();
+        return view('themes.default.assets.create_step1', compact('recentClients'));
     }
 
-    public function create()
+    public function postCreateStep1(Request $request)
     {
-        $clients = Client::all();
-        $theme = config('themes.active');
-        return view("themes.$theme.assets.create", compact('clients'));
+        $request->session()->put('client_id', $request->client_id);
+        return redirect()->route('assets.create.step2');
     }
 
-    public function store(Request $request)
+    public function createStep2()
     {
-        $request->validate([
-            'client_id' => 'required|exists:clients,id',
-            'description' => 'required|string|max:255',
-            'status' => 'required|string|max:255',
-            'location' => 'nullable|string|max:255',
-            'latitude' => 'nullable|numeric',
-            'longitude' => 'nullable|numeric',
+        return view('themes.default.assets.create_step2');
+    }
+
+    public function postCreateStep2(Request $request)
+    {
+        $request->session()->put('description', $request->description);
+        return redirect()->route('assets.create.step3');
+    }
+
+    public function createStep3()
+    {
+        $statuses = Status::all();
+        return view('themes.default.assets.create_step3', compact('statuses'));
+    }
+
+    public function postCreateStep3(Request $request)
+    {
+        $request->session()->put('status', $request->status);
+        return redirect()->route('assets.create.step4');
+    }
+
+    public function createStep4()
+    {
+        $clientId = session('client_id');
+        $client = Client::find($clientId);
+        return view('themes.default.assets.create_step4', compact('client'));
+    }
+
+    public function postCreateStep4(Request $request)
+    {
+        $request->session()->put('location', $request->location);
+        return redirect()->route('assets.create.step5');
+    }
+
+    public function createStep5()
+    {
+        return view('themes.default.assets.create_step5');
+    }
+
+    public function postCreateStep5(Request $request)
+    {
+        $request->session()->put('latitude', $request->latitude);
+        $request->session()->put('longitude', $request->longitude);
+        return redirect()->route('assets.create.step6');
+    }
+
+    public function createStep6()
+    {
+        return view('themes.default.assets.create_step6');
+    }
+
+    public function postCreateStep6(Request $request)
+    {
+        $validated = $request->validate([
             'image' => 'nullable|image|max:2048',
         ]);
 
@@ -41,58 +87,22 @@ class AssetController extends Controller
         }
 
         Asset::create([
-            'client_id' => $request->client_id,
-            'description' => $request->description,
-            'status' => $request->status,
-            'location' => $request->location,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude,
+            'client_id' => session('client_id'),
+            'description' => session('description'),
+            'status' => session('status'),
+            'location' => session('location'),
+            'latitude' => session('latitude'),
+            'longitude' => session('longitude'),
             'image_path' => $imagePath,
         ]);
 
         return redirect()->route('assets.index')->with('success', 'Asset created successfully.');
     }
 
-    public function edit(Asset $asset)
+    public function searchClients(Request $request)
     {
-        $clients = Client::all();
-        $theme = config('themes.active');
-        return view("themes.$theme.assets.edit", compact('asset', 'clients'));
-    }
-
-    public function update(Request $request, Asset $asset)
-    {
-        $request->validate([
-            'client_id' => 'required|exists:clients,id',
-            'description' => 'required|string|max:255',
-            'status' => 'required|string|max:255',
-            'location' => 'nullable|string|max:255',
-            'latitude' => 'nullable|numeric',
-            'longitude' => 'nullable|numeric',
-            'image' => 'nullable|image|max:2048',
-        ]);
-
-        if ($request->hasFile('image')) {
-            if ($asset->image_path) {
-                Storage::disk('public')->delete($asset->image_path);
-            }
-            $imagePath = $request->file('image')->store('assets', 'public');
-            $asset->image_path = $imagePath;
-        }
-
-        $asset->update($request->except('image'));
-
-        return redirect()->route('assets.index')->with('success', 'Asset updated successfully.');
-    }
-
-    public function destroy(Asset $asset)
-    {
-        if ($asset->image_path) {
-            Storage::disk('public')->delete($asset->image_path);
-        }
-
-        $asset->delete();
-
-        return redirect()->route('assets.index')->with('success', 'Asset deleted successfully.');
+        $query = $request->get('query', '');
+        $clients = Client::where('alias', 'LIKE', "%{$query}%")->get();
+        return response()->json($clients);
     }
 }
