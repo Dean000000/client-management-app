@@ -12,13 +12,15 @@ class AssetController extends Controller
     public function index()
     {
         $assets = Asset::with('client')->get();
-        return view('assets.index', compact('assets'));
+        $theme = config('themes.active');
+        return view("themes.$theme.assets.index", compact('assets'));
     }
 
     public function create()
     {
         $clients = Client::all();
-        return view('assets.create', compact('clients'));
+        $theme = config('themes.active');
+        return view("themes.$theme.assets.create", compact('clients'));
     }
 
     public function store(Request $request)
@@ -54,7 +56,8 @@ class AssetController extends Controller
     public function edit(Asset $asset)
     {
         $clients = Client::all();
-        return view('assets.edit', compact('asset', 'clients'));
+        $theme = config('themes.active');
+        return view("themes.$theme.assets.edit", compact('asset', 'clients'));
     }
 
     public function update(Request $request, Asset $asset)

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -9,12 +10,14 @@ class ClientController extends Controller
     public function index()
     {
         $clients = Client::all();
-        return view('clients.index', compact('clients'));
+        $theme = config('themes.active');
+        return view("themes.$theme.clients.index", compact('clients'));
     }
 
     public function create()
     {
-        return view('clients.create');
+        $theme = config('themes.active');
+        return view("themes.$theme.clients.create");
     }
 
     public function store(Request $request)
@@ -34,7 +37,8 @@ class ClientController extends Controller
 
     public function edit(Client $client)
     {
-        return view('clients.edit', compact('client'));
+        $theme = config('themes.active');
+        return view("themes.$theme.clients.edit", compact('client'));
     }
 
     public function update(Request $request, Client $client)

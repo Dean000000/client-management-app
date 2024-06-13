@@ -10,10 +10,12 @@ use App\Http\Controllers\AssetController;
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::get('/send-test-email', function () {
     Mail::to('info@deanhattingh.co.za')->send(new TestEmail());
     return 'Test email sent!';
 });
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -23,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
 Route::resource('clients', ClientController::class);
 Route::resource('clients.assets', AssetController::class);
 
@@ -36,4 +39,5 @@ Route::get('/clients/create', [ClientController::class, 'create'])->name('client
 Route::post('/clients', [ClientController::class, 'store'])->name('clients.store');
 Route::get('/clients/{client}/edit', [ClientController::class, 'edit'])->name('clients.edit');
 Route::put('/clients/{client}', [ClientController::class, 'update'])->name('clients.update');
+
 require __DIR__.'/auth.php';
