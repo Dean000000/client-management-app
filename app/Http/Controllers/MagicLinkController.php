@@ -22,7 +22,11 @@ class MagicLinkController extends Controller
         ]);
 
         $user = DB::table('users')->where('email', $request->email)->first();
-        
+
+        if (!$user->allowed_for_magic_link) {
+            return back()->withErrors(['email' => 'This email is not allowed for magic link login.']);
+        }
+
         $token = Hash::make($user->email . now());
 
         DB::table('password_resets')->updateOrInsert(

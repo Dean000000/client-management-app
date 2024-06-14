@@ -1,9 +1,6 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-use App\Mail\TestEmail;
-use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\AssetExportController;
@@ -20,7 +17,6 @@ Route::middleware(['auth', 'can:manage-users'])->group(function () {
     Route::resource('users', UserController::class);
 });
 Route::post('assets/update-status/{asset}', [AssetController::class, 'updateStatus'])->name('assets.updateStatus');
-
 
 Route::prefix('items')->group(function () {
     Route::get('create/step1', [ItemController::class, 'createStep1'])->name('items.create.step1');
@@ -96,5 +92,3 @@ Route::resource('assets', AssetController::class)->except(['show']);
 Route::get('assets/export', [AssetExportController::class, 'exportAll'])->name('assets.export.all');
 Route::get('assets/export/client/{client}', [AssetExportController::class, 'exportByClient'])->name('assets.export.client');
 Route::get('assets/export/client/{client}/status', [AssetExportController::class, 'exportByClientAndStatus'])->name('assets.export.client.status');
-
-require __DIR__.'/auth.php';
