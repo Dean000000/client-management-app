@@ -7,11 +7,11 @@ use App\Models\Client;
 use App\Models\Status;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 class AssetController extends Controller
 {
-	 public function exportAll()
+    public function exportAll()
     {
         $assets = Asset::with('client', 'status')->get();
         $pdf = PDF::loadView('pdf.assets', compact('assets'));
