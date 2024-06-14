@@ -59,13 +59,12 @@ class AssetController extends Controller
         $theme = config('themes.active');
         return view("themes.$theme.assets.edit", compact('asset', 'clients', 'statuses'));
     }
-
 public function update(Request $request, Asset $asset)
 {
     $validated = $request->validate([
         'client_id' => 'required|exists:clients,id',
         'description' => 'required|string|max:255',
-        'status' => 'required|integer|exists:statuses,id', // Ensure status is validated as an integer
+        'status_id' => 'required|integer|exists:statuses,id', // Use status_id instead of status
         'location' => 'nullable|string|max:255',
         'latitude' => 'nullable|numeric',
         'longitude' => 'nullable|numeric',
@@ -83,8 +82,6 @@ public function update(Request $request, Asset $asset)
 
     return redirect()->route('assets.index')->with('success', 'Asset updated successfully.');
 }
-
-
 
     public function createStep1()
     {

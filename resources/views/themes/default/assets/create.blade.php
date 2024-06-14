@@ -3,7 +3,7 @@
 @section('content')
     <h1>Add Asset</h1>
 
-    <form action="{{ route('assets.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('assets.store') }}\" method="POST\" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
             <label for="client_id">Client</label>
@@ -19,7 +19,11 @@
         </div>
         <div class="form-group">
             <label for="status">Status</label>
-            <input type="text" name="status" id="status" class="form-control" required>
+            <select name="status" id="status" class="form-control">
+                @foreach($statuses as $status)
+                    <option value="{{ $status->id }}">{{ $status->name }}</option>
+                @endforeach
+            </select>
         </div>
         <div class="form-group">
             <label for="location">Location</label>

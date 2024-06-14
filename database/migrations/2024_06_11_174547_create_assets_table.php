@@ -16,8 +16,8 @@ class CreateAssetsTable extends Migration
             $table->decimal('latitude', 10, 7)->nullable();
             $table->decimal('longitude', 10, 7)->nullable();
             $table->string('image_path')->nullable();
-            $table->unsignedInteger('status')->nullable(); // Default status set to 1
-            $table->timestamps();
+ $table->unsignedInteger('status')->default(1); // Default status set to 1
+ $table->timestamps();
         });
     }
 

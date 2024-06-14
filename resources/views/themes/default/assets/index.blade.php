@@ -2,7 +2,7 @@
 
 @section('content')
     <h1>Assets</h1>
-    <a href="{{ route('assets.create') }}" class="btn btn-primary">Add Asset</a>
+    <a href="{{ route('assets.create.step1') }}" class="btn btn-primary">Add Asset</a>
     <a href="{{ route('assets.export.all') }}" class="btn btn-secondary">Export All Assets</a>
 
     <form action="{{ route('assets.export.client.status', ['client' => 'client_id_placeholder']) }}" method="GET" class="form-inline" id="export-client-status-form">
@@ -12,9 +12,9 @@
             @endforeach
         </select>
 
-        <select name="status" class="form-control" id="status-select">
+        <select name="status_id" class="form-control" id="status-select">
             @foreach($statuses as $status)
-                <option value="{{ $status->name }}">{{ $status->name }}</option>
+                <option value="{{ $status->id }}">{{ $status->name }}</option>
             @endforeach
         </select>
 
@@ -39,7 +39,7 @@
                     <td>{{ $asset->id }}</td>
                     <td>{{ $asset->client->alias }}</td>
                     <td>{{ $asset->description }}</td>
-                    <td>{{ $asset->status }}</td>
+                    <td>{{ $asset->status->name }}</td> <!-- Display status name -->
                     <td>{{ $asset->location }}</td>
                     <td>
                         @if ($asset->image_path)
