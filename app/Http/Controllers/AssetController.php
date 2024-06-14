@@ -60,29 +60,31 @@ class AssetController extends Controller
         return view("themes.$theme.assets.edit", compact('asset', 'clients', 'statuses'));
     }
 
-    public function update(Request $request, Asset $asset)
-    {
-        $validated = $request->validate([
-            'client_id' => 'required|exists:clients,id',
-            'description' => 'required|string|max:255',
-            'status' => 'required|exists:statuses,id', // Ensure status is validated
-            'location' => 'nullable|string|max:255',
-            'latitude' => 'nullable|numeric',
-            'longitude' => 'nullable|numeric',
-            'image' => 'nullable|image|max:2048',
-        ]);
+public function update(Request $request, Asset $asset)
+{
+    $validated = $request->validate([
+        'client_id' => 'required|exists:clients,id',
+        'description' => 'required|string|max:255',
+        'status' => 'required|integer|exists:statuses,id', // Ensure status is validated as an integer
+        'location' => 'nullable|string|max:255',
+        'latitude' => 'nullable|numeric',
+        'longitude' => 'nullable|numeric',
+        'image' => 'nullable|image|max:2048',
+    ]);
 
-        if ($request->hasFile('image')) {
-            if ($asset->image_path) {
-                Storage::disk('public')->delete($asset->image_path);
-            }
-            $validated['image_path'] = $request->file('image')->store('assets', 'public');
+    if ($request->hasFile('image')) {
+        if ($asset->image_path) {
+            Storage::disk('public')->delete($asset->image_path);
         }
-
-        $asset->update($validated);
-
-        return redirect()->route('assets.index')->with('success', 'Asset updated successfully.');
+        $validated['image_path'] = $request->file('image')->store('assets', 'public');
     }
+
+    $asset->update($validated);
+
+    return redirect()->route('assets.index')->with('success', 'Asset updated successfully.');
+}
+
+
 
     public function createStep1()
     {
