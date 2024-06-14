@@ -12,7 +12,7 @@
             @endforeach
         </select>
    
-        <button type="submit" class="btn btn-secondary">Export By Client and Status</button>
+        <button type="submit" class="btn btn-secondary">Export By Client</button>
     </form>
 
     <table class="table mt-4">
@@ -21,7 +21,6 @@
                 <th>ID</th>
                 <th>Client</th>
                 <th>Description</th>
-                <th>Status</th>
                 <th>Location</th>
                 <th>Image</th>
                 <th>Actions</th>
@@ -33,18 +32,17 @@
                     <td>{{ $item->id }}</td>
                     <td>{{ $item->client->alias }}</td>
                     <td>{{ $item->description }}</td>
-                    <td>{{ $item->status }}</td>
                     <td>{{ $item->location }}</td>
                     <td>
                         @if ($item->image_path)
-                            <img src="{{ item('storage/' . $item->image_path) }}" alt="{{ $item->description }}" style="width: 100px; height: auto;">
+                            <img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->description }}" style="width: 100px; height: auto;">
                         @else
                             No image
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('assets.edit', $item->id) }}" class="btn btn-warning">Edit</a>
-                        <form action="{{ route('assets.destroy', $item->id) }}" method="POST" style="display:inline;">
+                        <a href="{{ route('items.edit', $item->id) }}" class="btn btn-warning">Edit</a>
+                        <form action="{{ route('items.destroy', $item->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger">Delete</button>

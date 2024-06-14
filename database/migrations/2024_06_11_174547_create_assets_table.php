@@ -12,11 +12,11 @@ class CreateAssetsTable extends Migration
             $table->id();
             $table->foreignId('client_id')->constrained()->onDelete('cascade');
             $table->string('description');
-            $table->string('status');
             $table->string('location')->nullable();
             $table->decimal('latitude', 10, 7)->nullable();
             $table->decimal('longitude', 10, 7)->nullable();
             $table->string('image_path')->nullable();
+            $table->string('status')->default('pending'); // Add default value for status
             $table->timestamps();
         });
     }

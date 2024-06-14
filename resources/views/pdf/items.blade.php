@@ -39,7 +39,13 @@
                     <td>{{ $item->location }}</td>
                     <td>{{ $item->latitude }}</td>
                     <td>{{ $item->longitude }}</td>
-                    <td><img src="{{ asset('storage/' . $item->image_path) }}" alt="Item Image" width="100"></td>
+                    <td>
+                        @if ($item->image_path)
+                            <img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->description }}" style="width: 100px; height: auto;">
+                        @else
+                            No image
+                        @endif
+                    </td>
                 </tr>
             @endforeach
         </tbody>

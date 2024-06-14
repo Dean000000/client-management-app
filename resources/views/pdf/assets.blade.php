@@ -24,7 +24,6 @@
                 <th>ID</th>
                 <th>Client</th>
                 <th>Description</th>
-                <th>Status</th>
                 <th>Location</th>
                 <th>Latitude</th>
                 <th>Longitude</th>
@@ -42,7 +41,7 @@
                     <td>{{ $asset->longitude }}</td>
                     <td>
                         @if ($asset->image_path)
-                            <img src="{{ public_path('storage/' . $asset->image_path) }}" alt="{{ $asset->description }}" style="width: 50px; height: auto;">
+                            <img src="{{ asset('storage/' . $asset->image_path) }}" alt="{{ $asset->description }}" style="width: 100px; height: auto;">
                         @else
                             No image
                         @endif

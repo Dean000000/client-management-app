@@ -98,7 +98,14 @@ class ItemController extends Controller
 
     public function createStep4()
     {
-        return view('themes.default.items.create_step4');
+        $client_id = session('client_id');
+        $client = Client::find($client_id);
+
+        if (!$client) {
+            return redirect()->route('items.create.step3')->withErrors('Client not found.');
+        }
+
+        return view('themes.default.items.create_step4', compact('client'));
     }
 
     public function postCreateStep4(Request $request)
@@ -114,6 +121,18 @@ class ItemController extends Controller
     }
 
     public function postCreateStep5(Request $request)
+    {
+        $request->session()->put('latitude', $request->latitude);
+        $request->session()->put('longitude', $request->longitude);
+        return redirect()->route('items.create.step6');
+    }
+
+    public function createStep6()
+    {
+        return view('themes.default.items.create_step6');
+    }
+
+    public function postCreateStep6(Request $request)
     {
         $validated = $request->validate([
             'image' => 'nullable|image|max:2048',

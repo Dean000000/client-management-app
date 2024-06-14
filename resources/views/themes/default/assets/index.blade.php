@@ -2,21 +2,22 @@
 
 @section('content')
     <h1>Assets</h1>
-    <a href="{{ route('assets.create.step1') }}" class="btn btn-primary">Add Asset</a>
+    <a href="{{ route('assets.create') }}" class="btn btn-primary">Add Asset</a>
     <a href="{{ route('assets.export.all') }}" class="btn btn-secondary">Export All Assets</a>
 
-    <form action="{{ route('assets.export.client', ['client' => 'client_id_placeholder']) }}" method="GET" class="form-inline" id="export-client-form">
+    <form action="{{ route('assets.export.client.status', ['client' => 'client_id_placeholder']) }}" method="GET" class="form-inline" id="export-client-status-form">
         <select name="client_id" class="form-control" id="client-select">
             @foreach($clients as $client)
                 <option value="{{ $client->id }}">{{ $client->alias }}</option>
             @endforeach
         </select>
-        <select name="status_id" class="form-control">
-            <option value="">All Statuses</option>
+
+        <select name="status" class="form-control" id="status-select">
             @foreach($statuses as $status)
-                <option value="{{ $status->id }}">{{ $status->name }}</option>
+                <option value="{{ $status->name }}">{{ $status->name }}</option>
             @endforeach
         </select>
+
         <button type="submit" class="btn btn-secondary">Export By Client and Status</button>
     </form>
 
@@ -61,9 +62,10 @@
     </table>
 
     <script>
-        document.getElementById('export-client-form').addEventListener('submit', function (event) {
+        document.getElementById('export-client-status-form').addEventListener('submit', function (event) {
             var clientId = document.getElementById('client-select').value;
-            this.action = this.action.replace('client_id_placeholder', clientId);
+            var status = document.getElementById('status-select').value;
+            this.action = this.action.replace('client_id_placeholder', clientId) + '?status=' + status;
         });
     </script>
 @endsection

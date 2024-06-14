@@ -25,24 +25,15 @@ class AssetController extends Controller
         return $pdf->download("assets_{$client->alias}.pdf");
     }
 
-    public function exportByClientAndStatus(Client $client, Request $request)
+    public function exportByClientAndStatus(Client $client, Status $status)
     {
-        $status = $request->input('status'); // Get the status from the request
-
-        // Validate that status is provided
-        if (!$status) {
-            return redirect()->back()->withErrors('Status is required.');
-        }
-
-        $assets = Asset::with('client')
+        $assets = Asset::with('client', 'status')
             ->where('client_id', $client->id)
-            ->where('status', $status) // Filter by status
+            ->where('status', $status->id)
             ->get();
-
         $pdf = PDF::loadView('pdf.assets', compact('assets'));
-        return $pdf->download("assets_{$client->alias}_{$status}.pdf");
+        return $pdf->download("assets_{$client->alias}_{$status->name}.pdf");
     }
-
     public function index()
     {
         $assets = Asset::with('client')->get();
@@ -51,8 +42,7 @@ class AssetController extends Controller
         $theme = config('themes.active');
         return view("themes.$theme.assets.index", compact('assets', 'clients', 'statuses'));
     }
-
-    public function edit(Asset $asset)
+public function edit(Asset $asset)
     {
         $clients = Client::all();
         $statuses = Status::all();
@@ -65,7 +55,7 @@ class AssetController extends Controller
         $validated = $request->validate([
             'client_id' => 'required|exists:clients,id',
             'description' => 'required|string|max:255',
-            'status' => 'required|exists:statuses,id', // Ensure status is validated
+            'status' => 'required|exists:statuses,id',
             'location' => 'nullable|string|max:255',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
@@ -173,10 +163,10 @@ class AssetController extends Controller
         return redirect()->route('assets.index')->with('success', 'Asset created successfully.');
     }
 
-    public function searchClients(Request $request)
-    {
-        $query = $request->get('query', '');
-        $clients = Client::where('alias', 'LIKE', "%{$query}%")->get();
-        return response()->json($clients);
-    }
+public function searchClients(Request $request)
+{
+    $query = $request->get('query', '');
+    $clients = Client::where('alias', 'LIKE', "%{$query}%")->get();
+    return response()->json($clients);
+}
 }

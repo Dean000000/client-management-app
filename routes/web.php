@@ -9,6 +9,7 @@ use App\Http\Controllers\AssetController;
 use App\Http\Controllers\AssetExportController;
 use App\Http\Controllers\ItemController;
 
+
 Route::prefix('items')->group(function () {
     Route::get('create/step1', [ItemController::class, 'createStep1'])->name('items.create.step1');
     Route::post('create/step1', [ItemController::class, 'postCreateStep1'])->name('items.create.step1.post');
@@ -17,13 +18,16 @@ Route::prefix('items')->group(function () {
     Route::post('create/step2', [ItemController::class, 'postCreateStep2'])->name('items.create.step2.post');
 
     Route::get('create/step3', [ItemController::class, 'createStep3'])->name('items.create.step3');
-    Route::post('createStep3', [ItemController::class, 'postCreateStep3'])->name('items.create.step3.post');
+    Route::post('create/step3', [ItemController::class, 'postCreateStep3'])->name('items.create.step3.post');
 
     Route::get('create/step4', [ItemController::class, 'createStep4'])->name('items.create.step4');
-    Route::post('createStep4', [ItemController::class, 'postCreateStep4'])->name('items.create.step4.post');
+    Route::post('create/step4', [ItemController::class, 'postCreateStep4'])->name('items.create.step4.post');
 
     Route::get('create/step5', [ItemController::class, 'createStep5'])->name('items.create.step5');
     Route::post('create/step5', [ItemController::class, 'postCreateStep5'])->name('items.create.step5.post');
+
+    Route::get('create/step6', [ItemController::class, 'createStep6'])->name('items.create.step6');
+    Route::post('create/step6', [ItemController::class, 'postCreateStep6'])->name('items.create.step6.post');
 });
 
 Route::resource('items', ItemController::class)->except(['show']);
@@ -79,6 +83,6 @@ Route::resource('assets', AssetController::class)->except(['show']);
 // Export routes
 Route::get('assets/export', [AssetExportController::class, 'exportAll'])->name('assets.export.all');
 Route::get('assets/export/client/{client}', [AssetExportController::class, 'exportByClient'])->name('assets.export.client');
-Route::get('assets/export/client/{client}/status/{status}', [AssetExportController::class, 'exportByClientAndStatus'])->name('assets.export.client.status');
+Route::get('assets/export/client/{client}/status', [AssetExportController::class, 'exportByClientAndStatus'])->name('assets.export.client.status');
 
 require __DIR__.'/auth.php';
