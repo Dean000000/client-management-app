@@ -37,7 +37,6 @@
                     <td>{{ $asset->id }}</td>
                     <td>{{ $asset->client->alias }}</td>
                     <td>{{ $asset->description }}</td>
-                    <td>{{ $asset->status->name }}</td>
                     <td>{{ $asset->location }}</td>
                     <td>{{ $asset->latitude }}</td>
                     <td>{{ $asset->longitude }}</td>

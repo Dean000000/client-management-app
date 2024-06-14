@@ -26,9 +26,13 @@ class AssetExportController extends Controller
 
     public function exportByClientAndStatus(Client $client, Status $status)
     {
+        if (!$status) {
+            return redirect()->back()->withErrors('Status not found.');
+        }
+
         $assets = Asset::with('client', 'status')
             ->where('client_id', $client->id)
-            ->where('status', $status->id)
+            ->where('status_id', $status->id) // Ensure correct field name is used
             ->get();
         $pdf = PDF::loadView('pdf.assets', compact('assets'));
         return $pdf->download("assets_{$client->alias}_{$status->name}.pdf");
