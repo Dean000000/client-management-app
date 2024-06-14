@@ -8,7 +8,17 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\AssetExportController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\MagicLinkController;
+use App\Http\Controllers\Admin\UserController;
 
+Route::get('/login', [MagicLinkController::class, 'showLoginForm'])->name('login');
+Route::post('/send-magic-link', [MagicLinkController::class, 'sendMagicLink'])->name('sendMagicLink');
+Route::get('/magic-link/{token}', [MagicLinkController::class, 'login'])->name('magicLinkLogin');
+
+// User management routes for admin
+Route::middleware(['auth', 'can:manage-users'])->group(function () {
+    Route::resource('users', UserController::class);
+});
 Route::post('assets/update-status/{asset}', [AssetController::class, 'updateStatus'])->name('assets.updateStatus');
 
 
@@ -39,7 +49,7 @@ Route::get('items/export', [ItemController::class, 'exportAll'])->name('items.ex
 Route::get('items/export/client/{client}', [ItemController::class, 'exportByClient'])->name('items.export.client');
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::get('/send-test-email', function () {
