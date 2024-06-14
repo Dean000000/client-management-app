@@ -7,14 +7,40 @@ use App\Models\Client;
 use App\Models\Status;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class AssetController extends Controller
 {
+	 public function exportAll()
+    {
+        $assets = Asset::with('client', 'status')->get();
+        $pdf = PDF::loadView('pdf.assets', compact('assets'));
+        return $pdf->download('assets.pdf');
+    }
+
+    public function exportByClient(Client $client)
+    {
+        $assets = Asset::with('client', 'status')->where('client_id', $client->id)->get();
+        $pdf = PDF::loadView('pdf.assets', compact('assets'));
+        return $pdf->download("assets_{$client->alias}.pdf");
+    }
+
+    public function exportByClientAndStatus(Client $client, Status $status)
+    {
+        $assets = Asset::with('client', 'status')
+            ->where('client_id', $client->id)
+            ->where('status', $status->id)
+            ->get();
+        $pdf = PDF::loadView('pdf.assets', compact('assets'));
+        return $pdf->download("assets_{$client->alias}_{$status->name}.pdf");
+    }
     public function index()
     {
         $assets = Asset::with('client')->get();
+        $clients = Client::all();
+        $statuses = Status::all();
         $theme = config('themes.active');
-        return view("themes.$theme.assets.index", compact('assets'));
+        return view("themes.$theme.assets.index", compact('assets', 'clients', 'statuses'));
     }
 public function edit(Asset $asset)
     {
