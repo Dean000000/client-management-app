@@ -10,8 +10,6 @@ use Illuminate\Http\Request;
 
 class AssetExportController extends Controller
 {
-class AssetExportController extends Controller
-{
     public function exportAll()
     {
         $assets = Asset::with('client', 'status')->get();
@@ -35,4 +33,4 @@ class AssetExportController extends Controller
         $pdf = PDF::loadView('pdf.assets', compact('assets'));
         return $pdf->download("assets_{$client->alias}_{$status->name}.pdf");
     }
-	}
+}
