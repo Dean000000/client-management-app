@@ -39,7 +39,7 @@
                     <td>{{ $asset->id }}</td>
                     <td>{{ $asset->client->alias }}</td>
                     <td>{{ $asset->description }}</td>
-                    <td>{{ $status->name }}</td>
+                    <td>{{ $asset->status_id }}</td>
                     <td>{{ $asset->location }}</td>
                     <td>
                         @if ($asset->image_path)

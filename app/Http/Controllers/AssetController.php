@@ -64,7 +64,7 @@ public function update(Request $request, Asset $asset)
     $validated = $request->validate([
         'client_id' => 'required|exists:clients,id',
         'description' => 'required|string|max:255',
-        'status_id' => 'required|integer|exists:statuses,id', // Use status_id instead of status
+        'status_id' => 'required|integer|exists:statuses,id', // Ensure status_id is validated
         'location' => 'nullable|string|max:255',
         'latitude' => 'nullable|numeric',
         'longitude' => 'nullable|numeric',
