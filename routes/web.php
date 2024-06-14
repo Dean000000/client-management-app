@@ -49,7 +49,8 @@ Route::prefix('assets')->group(function () {
     Route::post('create/step6', [AssetController::class, 'postCreateStep6'])->name('assets.create.step6.post');
 });
 
-Route::resource('assets', AssetController::class);
+// Specify only the routes needed, excluding 'show'
+Route::resource('assets', AssetController::class)->except(['show']);
 
 // Export routes
 Route::get('assets/export', [AssetExportController::class, 'exportAll'])->name('assets.export.all');

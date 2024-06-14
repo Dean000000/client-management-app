@@ -23,4 +23,9 @@ class Asset extends Model
     {
         return $this->belongsTo(Client::class);
     }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'status', 'id');
+    }
 }
