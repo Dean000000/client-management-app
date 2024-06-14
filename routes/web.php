@@ -6,6 +6,11 @@ use App\Mail\TestEmail;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\AssetController;
+use App\Http\Controllers\AssetExportController;
+
+Route::get('assets/export', [AssetExportController::class, 'exportAll'])->name('assets.export.all');
+Route::get('assets/export/client/{client}', [AssetExportController::class, 'exportByClient'])->name('assets.export.client');
+Route::get('assets/export/client/{client}/status/{status}', [AssetExportController::class, 'exportByClientAndStatus'])->name('assets.export.client.status');
 
 Route::get('/', function () {
     return view('welcome');
