@@ -10,13 +10,7 @@ class Asset extends Model
     use HasFactory;
 
     protected $fillable = [
-        'client_id',
-        'description',
-        'status',
-        'location',
-        'latitude',
-        'longitude',
-        'image_path',
+        'client_id', 'description', 'status_id', 'location', 'latitude', 'longitude', 'image_path'
     ];
 
     public function client()
@@ -26,6 +20,6 @@ class Asset extends Model
 
     public function status()
     {
-        return $this->belongsTo(Status::class, 'status', 'id');
+        return $this->belongsTo(Status::class);
     }
 }
