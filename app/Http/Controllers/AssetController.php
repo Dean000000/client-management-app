@@ -51,7 +51,6 @@ public function index()
     $theme = config('themes.active');
     return view("themes.$theme.assets.index", compact('assets', 'clients', 'statuses'));
 }
-
     public function edit(Asset $asset)
     {
         $clients = Client::all();

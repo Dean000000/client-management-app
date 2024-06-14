@@ -2,7 +2,7 @@
 
 @section('content')
     <h1>Assets</h1>
-    <a href="{{ route('assets.create') }}" class="btn btn-primary">Add Asset</a>
+    <a href="{{ route('assets.create.step1') }}" class="btn btn-primary">Add Asset</a>
     <a href="{{ route('assets.export.all') }}" class="btn btn-secondary">Export All Assets</a>
 
     <form action="{{ route('assets.export.client.status', ['client' => 'client_id_placeholder']) }}" method="GET" class="form-inline" id="export-client-status-form">
@@ -39,7 +39,7 @@
                     <td>{{ $asset->id }}</td>
                     <td>{{ $asset->client->alias }}</td>
                     <td>{{ $asset->description }}</td>
-                    <td>{{ $asset->status_id }}</td>
+                    <td>{{ $asset->status->name }}</td> <!-- Display status name -->
                     <td>{{ $asset->location }}</td>
                     <td>
                         @if ($asset->image_path)
