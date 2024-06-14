@@ -12,9 +12,9 @@
             @endforeach
         </select>
 
-        <select name="status" class="form-control" id="status-select">
+        <select name="status_id" class="form-control" id="status-select">
             @foreach($statuses as $status)
-                <option value="{{ $status->name }}">{{ $status->name }}</option>
+                <option value="{{ $status->id }}">{{ $status->name }}</option>
             @endforeach
         </select>
 
@@ -39,7 +39,15 @@
                     <td>{{ $asset->id }}</td>
                     <td>{{ $asset->client->alias }}</td>
                     <td>{{ $asset->description }}</td>
-                    <td>{{ $asset->status->name }}</td> <!-- Display status name -->
+                    <td>
+                        <select class="status-select" data-asset-id="{{ $asset->id }}">
+                            @foreach($statuses as $status)
+                                <option value="{{ $status->id }}" {{ $asset->status_id == $status->id ? 'selected' : '' }}>
+                                    {{ $status->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </td>
                     <td>{{ $asset->location }}</td>
                     <td>
                         @if ($asset->image_path)
@@ -66,6 +74,30 @@
             var clientId = document.getElementById('client-select').value;
             var status = document.getElementById('status-select').value;
             this.action = this.action.replace('client_id_placeholder', clientId) + '?status=' + status;
+        });
+
+        document.querySelectorAll('.status-select').forEach(function(select) {
+            select.addEventListener('change', function() {
+                var assetId = this.getAttribute('data-asset-id');
+                var statusId = this.value;
+
+                fetch(`/assets/update-status/${assetId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ status_id: statusId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Status updated successfully.');
+                    } else {
+                        alert('Failed to update status.');
+                    }
+                });
+            });
         });
     </script>
 @endsection

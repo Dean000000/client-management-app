@@ -81,6 +81,17 @@ public function update(Request $request, Asset $asset)
 
     return redirect()->route('assets.index')->with('success', 'Asset updated successfully.');
 }
+public function updateStatus(Request $request, Asset $asset)
+{
+    $validated = $request->validate([
+        'status_id' => 'required|integer|exists:statuses,id',
+    ]);
+
+    $asset->status_id = $validated['status_id'];
+    $asset->save();
+
+    return response()->json(['success' => 'Status updated successfully.']);
+}
 
     public function createStep1()
     {

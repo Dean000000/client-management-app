@@ -9,6 +9,8 @@ use App\Http\Controllers\AssetController;
 use App\Http\Controllers\AssetExportController;
 use App\Http\Controllers\ItemController;
 
+Route::post('assets/update-status/{asset}', [AssetController::class, 'updateStatus'])->name('assets.updateStatus');
+
 
 Route::prefix('items')->group(function () {
     Route::get('create/step1', [ItemController::class, 'createStep1'])->name('items.create.step1');
