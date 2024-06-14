@@ -43,14 +43,14 @@ class AssetController extends Controller
         return $pdf->download("assets_{$client->alias}_{$status}.pdf");
     }
 
-    public function index()
-    {
-        $assets = Asset::with('client')->get();
-        $clients = Client::all();
-        $statuses = Status::all();
-        $theme = config('themes.active');
-        return view("themes.$theme.assets.index", compact('assets', 'clients', 'statuses'));
-    }
+public function index()
+{
+    $assets = Asset::with('client', 'status')->get(); // Eager load status relationship
+    $clients = Client::all();
+    $statuses = Status::all();
+    $theme = config('themes.active');
+    return view("themes.$theme.assets.index", compact('assets', 'clients', 'statuses'));
+}
 
     public function edit(Asset $asset)
     {
